@@ -13,47 +13,44 @@ import java.net.URL;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    public class DownloadTask extends AsyncTask<String,Void,String>{
-
-
-        @Override
-        protected String doInBackground(String... urls) {
-            String result = "";
-            URL url;
-            HttpURLConnection urlConnection = null;
-            try {
-                url = new URL(urls[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = urlConnection.getInputStream();
-                InputStreamReader reader = new InputStreamReader(in);
-                int data = reader.read();
-
-                while (data != -1) {
-                    char current = (char) data;
-                    result += current;
-                    data = reader.read();
-                }
-
-                return result;
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Could not find weather :(", Toast.LENGTH_SHORT).show();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.i("JSON",s);
-
-        }
-    }
+//    public class DownloadTask extends AsyncTask<String,Void,String>{
+//        @Override
+//        protected String doInBackground(String... urls) {
+//            String result = "";
+//            URL url;
+//            HttpURLConnection urlConnection = null;
+//            try {
+//                url = new URL(urls[0]);
+//                urlConnection = (HttpURLConnection) url.openConnection();
+//                InputStream in = urlConnection.getInputStream();
+//                InputStreamReader reader = new InputStreamReader(in);
+//                int data = reader.read();
+//
+//                while (data != -1) {
+//                    char current = (char) data;
+//                    result += current;
+//                    data = reader.read();
+//                }
+//                return result;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                Toast.makeText(getApplicationContext(), "Could not find weather :(", Toast.LENGTH_SHORT).show();
+//                return null;
+//            }
+//        }
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            Log.i("JSON",s);
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +62,23 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         Api api = retrofit.create(Api.class);
-        Call<List<ShoppingDetail>> call = api.getHeros();
+        Call<List<ShoppingDetail>> call = api.getDetails();
+        call.enqueue(new Callback<List<ShoppingDetail>>() {
+            @Override
+            public void onResponse(Call<List<ShoppingDetail>> call, Response<List<ShoppingDetail>> response) {
+                List<ShoppingDetail>shoppingList=response.body();
+
+                for(ShoppingDetail h: shoppingList){
+                    Log.d("name", h.getName());
+                    Log.d("realname", h.getRealname());
+                    Log.d("imageurl",h.getImageurl());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ShoppingDetail>> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
