@@ -20,37 +20,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-//    public class DownloadTask extends AsyncTask<String,Void,String>{
-//        @Override
-//        protected String doInBackground(String... urls) {
-//            String result = "";
-//            URL url;
-//            HttpURLConnection urlConnection = null;
-//            try {
-//                url = new URL(urls[0]);
-//                urlConnection = (HttpURLConnection) url.openConnection();
-//                InputStream in = urlConnection.getInputStream();
-//                InputStreamReader reader = new InputStreamReader(in);
-//                int data = reader.read();
-//
-//                while (data != -1) {
-//                    char current = (char) data;
-//                    result += current;
-//                    data = reader.read();
-//                }
-//                return result;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                Toast.makeText(getApplicationContext(), "Could not find weather :(", Toast.LENGTH_SHORT).show();
-//                return null;
-//            }
-//        }
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//            Log.i("JSON",s);
-//        }
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
                 List<ShoppingDetail>shoppingList=response.body();
 
                 for(ShoppingDetail h: shoppingList){
-                    Log.d("name", h.getName());
-                    Log.d("realname", h.getRealname());
-                    Log.d("imageurl",h.getImageurl());
+                   Log.d("name", h.getTitle());
+//                    Log.d("realname", h.getRealname());
+//                    Log.d("imageurl",h.getImageurl());
                 }
             }
 
